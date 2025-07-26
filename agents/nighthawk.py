@@ -1,5 +1,12 @@
+import datetime
+import socket
+import requests
+
 import psutil
 import time
+
+#AETHER SIEM SERVER
+AETHER_SIEM = "http://localhost:5000/log"
 
 # Threshold
 CPU_THRESHOLD = 90.0
@@ -29,6 +36,22 @@ def watch_processes():
                 print(f"   Memory: {mem:.2f} MB")
                 print("-" * 40)
 
+                # Setup alert in JSON format to send off
+                alert = {
+                    "timestamp": datetime.datetime.now().isoformat(),
+                    "hostname": socket.gethostname(),
+                    "pid": pid,
+                    "processName": process_name,
+                    "cpu_percentage": cpu_percent,
+                    "memory": mem
+                }
+
+                # Send response to AETHER
+                try:
+                    response = requests.post(AETHER_SIEM, json=alert)
+                except Exception as e:
+                    print(f"❌ Failed to send alert: {e}")
+
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
 
@@ -37,7 +60,7 @@ def main():
     print("🦉 NightWatcher v1.0 is running... Press Ctrl+C to stop.\n")
     while True:
         initialize_cpu_tracking()
-        time.sleep(0.1)
+        time.sleep(10)
 
         watch_processes()
         time.sleep(SCAN_INTERVAL)
