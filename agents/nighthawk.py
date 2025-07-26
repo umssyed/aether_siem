@@ -1,6 +1,9 @@
 import psutil
 import time
 
+#AETHER SIEM SERVER
+AETHER_SIEM = "http://localhost:5000/log"
+
 # Threshold
 CPU_THRESHOLD = 90.0
 MEM_THRESHOLD = 300
