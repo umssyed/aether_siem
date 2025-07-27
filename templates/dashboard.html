@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" http-equiv="refresh" content="5">
+    <title>Aether Dashboard</title>
+    <style>
+        body { font-family: Arial,serif; background: #f4f4f4; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #333; color: white; }
+    </style>
+</head>
+<body>
+    <h1>AetherSIEM Alerts Dashboard</h1>
+    {% if alerts %}
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Host</th>
+            <th>PID</th>
+            <th>Process Name</th>
+            <th>CPU %</th>
+            <th>Memory</th>
+            <th>Reason</th>
+        </tr>
+        {% for alert in alerts %}
+        <tr>
+            <td>{{ alert.timestamp }}</td>
+            <td>{{ alert.hostname }}</td>
+            <td>{{ alert.pid }}</td>
+            <td>{{ alert.processName}}</td>
+            <td>{{ alert.cpu_percentage}}%</td>
+            <td>{{ alert.memory}} MB</td>
+            <td>{{ alert.reason | join(', ') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No alerts yet.</p>
+    {% endif %}
+</body>
+</html>

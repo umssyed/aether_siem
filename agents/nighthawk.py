@@ -10,7 +10,7 @@ AETHER_SIEM = "http://localhost:5000/log"
 
 # Threshold
 CPU_THRESHOLD = 90.0
-MEM_THRESHOLD = 300
+MEM_THRESHOLD = 5000
 SCAN_INTERVAL = 10
 
 
@@ -60,7 +60,7 @@ def main():
     print("🦉 NightWatcher v1.0 is running... Press Ctrl+C to stop.\n")
     while True:
         initialize_cpu_tracking()
-        time.sleep(10)
+        time.sleep(5)
 
         watch_processes()
         time.sleep(SCAN_INTERVAL)
