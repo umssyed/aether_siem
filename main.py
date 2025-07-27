@@ -1,21 +1,14 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, render_template
+from app.routes import routes
+from app.database import Base, engine
 
-app = Flask(__name__)
-
-# Temporary storage for alerts
-alerts = []
-
-@app.route("/log", methods=["POST"])
-def receive_log():
-    log = request.json
-    alerts.append(log)
-    print("\nNew log received:")
-    print(log)
-    return jsonify({"status": "received"}), 200
+app = Flask(__name__, template_folder="app/templates")
+app.register_blueprint(routes)
+Base.metadata.create_all(bind=engine)
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html", alerts=alerts)
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
