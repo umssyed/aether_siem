@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="5">
+    <meta charset="UTF-8" http-equiv="refresh" content="1">
     <title>Aether Dashboard</title>
     <style>
         body { font-family: Arial,serif; background: #f4f4f4; padding: 20px; }
@@ -17,8 +17,7 @@
         <tr>
             <th>Timestamp</th>
             <th>Host</th>
-            <th>PID</th>
-            <th>Process Name</th>
+            <th>Application Name</th>
             <th>CPU %</th>
             <th>Memory</th>
             <th>Reason</th>
@@ -27,11 +26,10 @@
         <tr>
             <td>{{ alert.timestamp }}</td>
             <td>{{ alert.hostname }}</td>
-            <td>{{ alert.pid }}</td>
-            <td>{{ alert.processName}}</td>
-            <td>{{ alert.cpu_percentage}}%</td>
-            <td>{{ alert.memory}} MB</td>
-            <td>{{ alert.reason | join(', ') }}</td>
+            <td>{{ alert.app_name }}</td>
+            <td>{{ alert.cpu_percentage }}%</td>
+            <td>{{ alert.memory }} MB</td>
+            <td>{{ alert.reason }}</td>
         </tr>
         {% endfor %}
     </table>
