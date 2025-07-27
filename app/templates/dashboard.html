@@ -1,40 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="1">
-    <title>Aether Dashboard</title>
+    <title>AetherSIEM - Historical Logs</title>
     <style>
-        body { font-family: Arial,serif; background: #f4f4f4; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #333; color: white; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #333; color: white; }
     </style>
 </head>
 <body>
-    <h1>AetherSIEM Alerts Dashboard</h1>
-    {% if alerts %}
-    <table>
-        <tr>
-            <th>Timestamp</th>
-            <th>Host</th>
-            <th>Application Name</th>
-            <th>CPU %</th>
-            <th>Memory</th>
-            <th>Reason</th>
-        </tr>
-        {% for alert in alerts %}
-        <tr>
-            <td>{{ alert.timestamp }}</td>
-            <td>{{ alert.hostname }}</td>
-            <td>{{ alert.app_name }}</td>
-            <td>{{ alert.cpu_percentage }}%</td>
-            <td>{{ alert.memory }} MB</td>
-            <td>{{ alert.reason }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p>No alerts yet.</p>
-    {% endif %}
+<h1>Historical Logs</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>Hostname</th>
+        <th>Process</th>
+        <th>CPU (%)</th>
+        <th>Memory (MB)</th>
+        <th>Reason</th>
+    </tr>
+    </thead>
+    <tbody id="logs-body">
+    </tbody>
+</table>
+
+<script>
+    function loadLogs() {
+        fetch('/api/historical')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('logs-body');
+                tbody.innerHTML = '';
+                data.forEach(log => {
+                    const row = `
+                            <tr>
+                                <td>${log.timestamp}</td>
+                                <td>${log.hostname}</td>
+                                <td>${log.process_name}</td>
+                                <td>${log.cpu.toFixed(2)}</td>
+                                <td>${log.mem.toFixed(2)}</td>
+                                <td>${log.reason}</td>
+                            </tr>
+                        `;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    setInterval(loadLogs, 5000); // Refresh every 5 sec
+    loadLogs(); // Initial load
+</script>
 </body>
 </html>
